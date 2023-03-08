@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "./Navbar";
 import {data} from '../data';
 import MovieCard from './MovieCard';
-
+import { addMovies } from "../actions";
 class App extends React.Component{
 
   componentDidMount(){
@@ -10,14 +10,11 @@ class App extends React.Component{
 
     store.subscribe(()=>{
       console.log("Updated");
-      this.forceUpdate();//this will re-render the wholw app again
+      this.forceUpdate();//this will re-render the whole app again
     })
 
     //make api call and dispatch(action)
-    store.dispatch({
-      type:"ADD_MOVIES",
-      movies:data
-    })
+    store.dispatch(addMovies(data));
 
 
   }
@@ -26,8 +23,8 @@ class App extends React.Component{
 
   render(){
 
-      const movies=this.props.store.getState();
-      console.log("Render");
+      const {list}=this.props.store.getState();//{list:[],favourite:[]}
+      console.log(this.props.store.getState());
       return (
         <div className="App">
           <Navbar />
@@ -40,7 +37,7 @@ class App extends React.Component{
 
 
             <div className="list">
-                {movies.map((movie,index)=>(
+                {list.map((movie,index)=>(
                     <MovieCard movie={movie} key={`movie-${index}`}/>
                 ))}
             </div>
